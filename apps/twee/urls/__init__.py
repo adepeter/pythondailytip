@@ -1,0 +1,1 @@
+from django.urls import pathfrom ..views.home import HomePagefrom ..views.twee import ListTipByHashTag, retweet_postapp_name = 'twee'urlpatterns = [    path('', HomePage.as_view(), name='home'),    path('retweet/', retweet_post, name='retweet')]urlpatterns += [    path('<str:hash_tag>/', ListTipByHashTag.as_view(), name='tips_by_hash_tag')]

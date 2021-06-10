@@ -1,0 +1,1 @@
+from django.urls import path, includeapp_name = 'tweeapps'urlpatterns = [    path('restapi/', include('apps.restapi.urls')),    path('users/', include('apps.users.urls', namespace='users')),    path('', include('apps.twee.urls', namespace='twee')),]

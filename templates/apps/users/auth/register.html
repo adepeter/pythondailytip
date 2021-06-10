@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Registration | {{ block.super }}{% endblock %}
+
+{% block content %}
+    {% include 'includes/notice_box.html' with notice_message='Create new user account'%}
+    <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">
+                    User Registration <i class="mr-2"></i>
+                    <small class="">create new account</small>
+                </h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <form
+                    id="kt_form_1"
+                    (ngSubmit)="registerUser()"
+                    [formGroup]="userRegistrationForm"
+                    class="form">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">E-mail address:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="la la-at"></i>
+                </span>
+                                </div>
+                                <input
+                                        (keyup)="search(userRegistrationForm.controls['email'].value, 'email')"
+                                        (keydown.enter)="registerUser()"
+                                        class="form-control"
+                                        formControlName="email"
+                                        [ngClass]="{
+                    'is-valid': userRegistrationForm.controls['email'].valid,
+                    'is-invalid': userRegistrationForm.controls['email'].invalid
+                    }"
+                                        placeholder="Enter e-mail address"
+                                        type="email"/>
+                            </div>
+                            <span class="form-text text-muted">We'll never share your email with anyone else</span>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">Username:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="la la-group"></i>
+                </span>
+                                </div>
+                                <input
+                                        [ngClass]="{
+                    'is-valid': userRegistrationForm.controls['username'].valid,
+                    'is-invalid': userRegistrationForm.controls['username'].invalid
+                    }"
+                                        formControlName="username"
+                                        (keydown.enter)="registerUser()"
+                                        class="form-control"
+                                        placeholder="Enter username"
+                                        type="text"/>
+                            </div>
+                            <span class="form-text text-muted">Please enter your preferred username</span>
+                        </div>
+                    </div>
+                    <div formGroupName="passwords" class="form-group row mt-4">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">Password:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="la la-lock"></i>
+                </span>
+                                </div>
+                                <input
+                                        formControlName="password"
+                                        (keydown.enter)="registerUser()"
+                                        class="form-control"
+                                        [ngClass]="{
+                    'is-valid': passwordsAreValid(
+                    userRegistrationForm.get(['passwords', 'password'])?.value,
+                    userRegistrationForm.get(['passwords', 'repeatPassword'])?.value
+                    ),
+                    'is-invalid': !passwordsAreValid(
+                    userRegistrationForm.get(['passwords', 'password'])?.value,
+                    userRegistrationForm.get(['passwords', 'repeatPassword'])?.value
+                    )
+                    }"
+                                        placeholder="Enter password"
+                                        type="password"/>
+                            </div>
+                            <span class="form-text text-muted">Please enter your password</span>
+                        </div>
+                    </div>
+                    <div formGroupName="passwords" class="form-group row mt-4">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">Repeat password:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="la la-lock"></i>
+                </span>
+                                </div>
+                                <input
+                                        formControlName="repeatPassword"
+                                        (keydown.enter)="registerUser()"
+                                        class="form-control"
+                                        [ngClass]="{
+                    'is-valid': passwordsAreValid(
+                    userRegistrationForm.get(['passwords', 'password'])?.value,
+                    userRegistrationForm.get(['passwords', 'repeatPassword'])?.value
+                    ),
+                    'is-invalid': !passwordsAreValid(
+                    userRegistrationForm.get(['passwords', 'password'])?.value,
+                    userRegistrationForm.get(['passwords', 'repeatPassword'])?.value
+                    )
+                    }"
+                                        placeholder="Repeat password again"
+                                        type="password"/>
+                            </div>
+                            <ng-container [ngSwitch]="passwordsAreValid(
+                userRegistrationForm.get(['passwords', 'password'])?.value,
+                userRegistrationForm.get(['passwords', 'repeatPassword'])?.value
+                )">
+                                <span *ngSwitchCase="false" class="form-text text-danger">Passwords do not match</span>
+                                <span *ngSwitchDefault
+                                      class="form-text text-muted">Please enter your password again</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">Terms and Condition:</label>
+                        <div class="col-form-label col-lg-4 col-md-9 col-sm-12">
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-outline checkbox-success">
+                                    <input
+                                            formControlName="acceptTerms"
+                                            type="checkbox"/>
+                                    <span></span>
+                                    I accept terms and condition
+                                </label>
+                            </div>
+                            <span *ngIf="!hasAcceptedTerms" class="form-text text-danger">You need to accept terms and condition</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-9">
+                            <button
+                                    [hidden]="!hasAcceptedTerms"
+                                    [disabled]="!isFormValid"
+                                    class="btn btn-primary mr-2"
+                                    type="submit">Submit
+                            </button>
+                            <button class="btn btn-secondary" type="reset">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

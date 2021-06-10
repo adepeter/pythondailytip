@@ -1,0 +1,1 @@
+from django.contrib import adminfrom ..models import TweeCrypt@admin.register(TweeCrypt)class TweeCryptAdmin(admin.ModelAdmin):    list_display = [        'consumer_key',        'consumer_secret',        'access_token',        'access_token_secret',    ]__all__ = [    'TweeCryptAdmin']

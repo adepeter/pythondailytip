@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Tips with {{ hash_tag }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+    {% include 'includes/notice_box.html' with notice_message=notice_message %}
+
+    <!--begin: Row-->
+    <div class="row mb-7">
+        {% include 'apps/twee/includes/tweet_list.html' %}
+    </div>
+    <!--end: Row-->
+    {% if is_paginated %}
+        {% include 'includes/pagination.html' %}
+    {% endif %}
+{% endblock %}

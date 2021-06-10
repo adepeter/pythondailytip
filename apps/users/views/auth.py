@@ -1,0 +1,1 @@
+from django.contrib.auth.views import (    LoginView as BaseLoginView,    LogoutView as BaseLogoutView)from ..forms.auth import AuthenticationFormTEMPLATE_URL = 'apps/users/auth'class LoginView(BaseLoginView):    authentication_form = AuthenticationForm    template_name = f'{TEMPLATE_URL}/login.html'class LogoutView(BaseLogoutView):    pass

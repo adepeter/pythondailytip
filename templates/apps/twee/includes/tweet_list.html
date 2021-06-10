@@ -1,0 +1,66 @@
+{% for tweet in page_obj %}
+    <div class="col-md-3 col-lg-4">
+        <div class="card card-custom card-stretch gutter-b card-border">
+            <div class="card-header ribbon ribbon-top ribbon-ver">
+                <div class="ribbon-target bg-danger" style="top: -2px; right: 60px;" data-toggle="tooltip"
+                     title="Likes!">
+                    {{ tweet.likes }}
+                </div>
+                <div class="ribbon-target bg-success" style="top: -2px; right: 20px;" data-toggle="tooltip"
+                     title="Retweets!">
+                    <span class="label label-sm label-rounded label-success">{{ tweet.retweets }}</span>
+                </div>
+                <div class="card-title">
+                    <span class="card-icon">
+                        <i class="flaticon2-calendar-8 text-primary"></i>
+                    </span>
+                    <h3 class="card-label">{{ tweet.timestamp | date:'M. j, Y' }}
+                        <small>{{ tweet.tweeted_by }}</small></h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div data-scroll="true" data-height="200">{{ tweet.tip | safe | linebreaksbr }}</div>
+                {% if tweet.hash_tags.count > 0 %}
+                    <ul class="list-inline">
+                        {% for hash_tag in tweet.hash_tags.all %}
+                            <li class="list-inline-item">
+                                <a href="{% url 'tweeapps:twee:tips_by_hash_tag' hash_tag=hash_tag.name %}">
+                                    <span class="label label-primary label-inline font-weight-lighter mr-2">{{ hash_tag }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                {% if tweet.links %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-light-primary btn-sm">
+                            <span class="label label-sm pulse pulse-success mr-10">
+                                <span class="position-relative">{{ tweet.links.count }}</span>
+                                <span class="pulse-ring"></span>
+                            </span>Links
+                        </button>
+                        <button type="button" class="btn btn-light-primary dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Links Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            {% for link in tweet.links.all %}
+                                <a class="dropdown-item" href="{{ link.url }}">{{ link.url }}</a>
+                            {% empty %}
+                                <a class="dropdown-item disabled" href="#">No links</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <form method="POST" action="{% url 'tweeapps:twee:retweet' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="tweet_id" value="{{ tweet.tweet_id }}"/>
+                    <button type="submit" class="btn btn-outline-success font-weight-bold">Retweet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
