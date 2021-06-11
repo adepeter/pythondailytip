@@ -1,1 +1,1 @@
-APScheduler==3.7.0Django==3.2.4django-apscheduler==0.5.2django-cryptography==1.0djangorestframework==3.12.4tweepy==3.10.0
+APScheduler==3.7.0Django==3.2.4django-apscheduler==0.5.2django-cryptography==1.0djangorestframework==3.12.4tweepy==3.10.0gunicornwhitenoisedjango-heroku
